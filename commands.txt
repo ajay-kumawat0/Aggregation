@@ -1,0 +1,72 @@
+1) How to find isActive and also count users ?
+[
+  {
+    $match: {
+      isActive : true
+    }
+  },
+  {
+    $count: 'ActiveUsers'
+  }
+]
+
+2) What is the average age of all users ?
+
+[
+  {
+    $group: {
+      _id: "$gender",
+    }
+  }
+]
+
+[
+  {
+    $group: {
+      _id: "$age",
+    }
+  }
+]
+
+[
+  {
+    $group: {
+      _id: null, // null => help to group all the data in one document
+      averageAge : { // averageAge => it is like a variable or a name
+        $avg : "$age" // $avg => query to find average number, "$age" => this one is variable to find on this 
+      }
+    }
+  }
+]
+
+3) list out the top 5 most common favrote fruit among users 
+
+[
+  {
+    $group: {
+      _id: "$favoriteFruit",
+      count : {
+    	$sum : 1
+      }
+    }
+  }
+]
+
+[
+  {
+    $group: {
+      _id: "$favoriteFruit",
+      count : {
+        $sum : 1
+      }
+    },
+  },
+  {
+    $sort: {
+      count: -1
+    }
+  },
+  {
+    $limit: 2
+  }
+]
