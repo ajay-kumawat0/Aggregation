@@ -210,3 +210,88 @@
     $count: 'SpecialNumber'
   }
 ]
+
+11) Who has registered the most recently ?
+
+[
+  {
+    $sort: {
+      "registered": -1
+    }
+  },
+  {
+    $project: {
+      name : 1,
+      age : 1,
+      registered : 1
+    }
+  }
+]
+
+12) Categorize users by their favorite fruits ?
+[
+  {
+    $group: {
+      _id: "$favoriteFruit",
+      users : {$push : "$name"}
+    },
+  },
+]
+
+13) How many users have 'ad' as the second tag in their list of tags ? 
+[
+  {
+    $match: {
+      "tags.1" : "ad"
+    }
+  },
+  {
+  	$count: 'userAtSecondPosition'  
+  }
+]
+
+14) Find user who have both 'enim' and 'id' as their tags ?
+[
+  {
+    $match: {
+      tags : {
+        $all : ["enim", "id"]
+      }
+    }
+  }
+]
+
+15) List all the companies located in USA with their corresponding user count ?
+[
+  {
+    $match: {
+      "company.location.country" : "USA"
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      locationCount : {
+        $sum : 1
+      }
+    }
+  }
+]
+
+Other Ways
+
+[
+  {
+    $match: {
+      "company.location.country": "USA",
+    },
+  },
+  {
+    $group: {
+      _id: "$company.title",
+      locationCount: {
+        $sum: 1,
+      },
+    },
+  },
+]
