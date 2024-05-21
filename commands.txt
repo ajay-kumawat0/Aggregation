@@ -115,3 +115,56 @@
     },
   },
 ]
+
+7) What is the average number of tags per user ?
+
+[
+  {
+    $unwind: "$tags"
+  },
+  {
+    $group: {
+      _id: "$name",
+      count : {
+        $sum : 1
+      }
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      average : {
+        $avg : "$count"
+      }
+    }
+  }
+]
+
+[
+  {
+    $addFields: {
+      numberOfTags: {
+        $size : "$tags"
+      }
+    }
+  }
+]
+
+[
+  {
+    $addFields: {
+      numberOfTags: {
+        $size : "$tags"
+      }
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      averageNumberOfTags : {
+        $avg : "$numberOfTags"
+      }
+    }
+  },
+]
+
